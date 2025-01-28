@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kmcalert/HomePage.dart';
+import 'RegisterPage.dart';
+import 'LoginPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,16 +9,13 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'KMC App',
+      theme: ThemeData(primarySwatch: Colors.red),
+      home: const LoginPage(),
       debugShowCheckedModeBanner: false,
-      title: 'KMC',
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colors.white,
-      ),
-      home: const HomePage(),
     );
   }
 }

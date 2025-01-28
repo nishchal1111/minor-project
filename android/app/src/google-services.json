@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "743986087840",
+    "project_id": "kmc-alert-67d33",
+    "storage_bucket": "kmc-alert-67d33.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743986087840:android:3414e346c96e146f13c6c5",
+        "android_client_info": {
+          "package_name": "com.example.KMC_ALERT"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTGjnTNDlMRiG4ZG1TiUVz2-uBYzl-mPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
