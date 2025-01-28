@@ -1,0 +1,4 @@
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.jar filter=lfs diff=lfs merge=lfs -text
+android/app/src/main/java/Oracle_JDK-23.jdk/Contents/Home/lib/modules filter=lfs diff=lfs merge=lfs -text
+lib/OpenJDK-23.jdk/Contents/Home/lib/modules filter=lfs diff=lfs merge=lfs -text
