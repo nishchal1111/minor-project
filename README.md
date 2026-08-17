@@ -1,4 +1,5 @@
-KMC Alert
+KMC Alert:
+
 A Smart Civic Issue Reporting and Public Alert System for Kathmandu Valley
 
 KMC Alert is a Flutter-based mobile application developed to provide a digital platform for reporting, monitoring, and managing civic issues within Kathmandu  City. The system is designed to improve communication between citizens and municipal authorities by allowing users to report local problems with relevant descriptions, media, and geographical locations.
