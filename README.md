@@ -8,18 +8,34 @@ The application integrates Firebase for backend services and data management, wh
 
 Features
 User registration and authentication
+
 Civic issue reporting
+
 Location-based issue reporting
+
 Interactive maps using OpenStreetMap
+
 Issue descriptions and supporting images
+
 Firebase-based data storage and backend services
+
 Notifications and civic alerts
+
 Issue status tracking
+
 Location visualization of reported issues
+
 User-focused interface for accessing and managing reports
+
 Technology Stack
+
 Flutter — Cross-platform mobile application framework
+
 Dart — Programming language used for application development
+
 Firebase — Backend services, authentication, database, and storage
+
 OpenStreetMap (OSM) — Map and location visualization
+
 Geolocation Services — Location-based functionality
+
