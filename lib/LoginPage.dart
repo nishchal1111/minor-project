@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'auth_service.dart'; // Auth service for login handling
-import 'HomePage.dart'; // Home page navigation
-import 'RegisterPage.dart'; // Register page navigation
-import 'ForgotPasswordPage.dart'; // Forgot password page navigation
+import 'auth_service.dart';
+import 'HomePage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,38 +10,69 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final AuthService _authService = AuthService(); // Instance of AuthService
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _otpController = TextEditingController();
+  final AuthService _authService = AuthService();
   bool _isLoading = false;
+  bool _isOtpSent = false;
 
-  void _login() async {
-    String email = _emailController.text;
-    String password = _passwordController.text;
+  void _sendOtp() async {
+    String phoneNumber = _phoneController.text.trim();
+
+    if (phoneNumber.isEmpty || phoneNumber.length < 10) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid phone number (e.g., 9812345678)')),
+      );
+      return;
+    }
 
     setState(() {
       _isLoading = true;
     });
 
-    bool success = await _authService.loginUser(email, password);
+    final success = await _authService.sendOtp(phoneNumber);
+
+    setState(() {
+      _isLoading = false;
+      if (success) _isOtpSent = true;
+    });
+
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to send OTP')),
+      );
+    }
+  }
+
+  void _verifyOtp() async {
+    String phoneNumber = _phoneController.text.trim();
+    String otp = _otpController.text.trim();
+
+    if (otp.isEmpty || otp.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid OTP')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final token = await _authService.verifyOtp(phoneNumber, otp);
 
     setState(() {
       _isLoading = false;
     });
 
-    if (success) {
-      // Navigate to home page after successful login
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login successful')),
-      );
+    if (token != null) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } else {
-      // Show error message if login fails
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid email or password')),
+        const SnackBar(content: Text('Invalid OTP')),
       );
     }
   }
@@ -60,16 +89,15 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // KMC Logo centered with suitable spacing
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        "assets/images/kmc_logo.png", // KMC logo
-                        height: 100,  // Adjust size of the logo
-                        width: 100,   // Adjust size of the logo
+                        "assets/images/kmc_logo.png",
+                        height: 100,
+                        width: 100,
                       ),
-                      const SizedBox(height: 30), // Space between logo and title
+                      const SizedBox(height: 30),
                       const Text(
                         "KMC ALERT",
                         style: TextStyle(
@@ -89,14 +117,13 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   const SizedBox(height: 40),
-
-                  // Email text field
                   TextField(
-                    controller: _emailController,
+                    controller: _phoneController,
+                    keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      hintText: 'Email Address',
+                      hintText: 'Phone Number (e.g., 9812345678)',
                       hintStyle: const TextStyle(color: Colors.blueGrey),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -107,41 +134,41 @@ class _LoginPageState extends State<LoginPage> {
                         horizontal: 20.0,
                       ),
                       prefixIcon: const Icon(
-                        Icons.email,
+                        Icons.phone,
                         color: Colors.blueAccent,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-
-                  // Password text field
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Password',
-                      hintStyle: const TextStyle(color: Colors.blueGrey),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 20.0,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.lock,
-                        color: Colors.blueAccent,
+                  if (_isOtpSent) ...[
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: _otpController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Enter OTP',
+                        hintStyle: const TextStyle(color: Colors.blueGrey),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 20.0,
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.lock,
+                          color: Colors.blueAccent,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                   const SizedBox(height: 30),
-
-                  // Login button
                   ElevatedButton(
-                    onPressed: _login,
+                    onPressed: _isLoading
+                        ? null
+                        : (_isOtpSent ? _verifyOtp : _sendOtp),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueAccent,
                       padding: const EdgeInsets.symmetric(
@@ -153,12 +180,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     child: _isLoading
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                          )
-                        : const Text(
-                            'Login',
-                            style: TextStyle(
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            _isOtpSent ? 'Verify OTP' : 'Send OTP',
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -166,108 +191,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Forgot password and Register link
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>  ForgotPasswordPage(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "Forgot Password?",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 15),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegisterPage(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "Register",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-
-                  // Google Login Button (Styled)
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Implement Google login here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red, // Google Red color
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 60.0,
-                        vertical: 15.0,
-                      ),
-                    ),
-                    icon: const Icon(
-                      Icons.g_translate,
-                      color: Colors.white,
-                    ),
-                    label: const Text(
-                      "Login with Google",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Facebook Login Button (if you want to keep it)
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Implement Facebook login here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[900], // Facebook Blue
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 60.0,
-                        vertical: 15.0,
-                      ),
-                    ),
-                    icon: const Icon(
-                      Icons.facebook,
-                      color: Colors.white,
-                    ),
-                    label: const Text(
-                      "Login with Facebook",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
