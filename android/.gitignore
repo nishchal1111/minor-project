@@ -15,3 +15,25 @@ key.properties
 *.jdk/
 OpenJDK-*/
 Oracle_JDK-*/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Firebase / Google Cloud service account credentials
+*-firebase-adminsdk-*.json
+firebase-adminsdk-*.json
+
+# Local configuration containing credentials
+python_backend/config.py
+
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Firebase / Google Cloud service account credentials
+*-firebase-adminsdk-*.json
+firebase-adminsdk-*.json
