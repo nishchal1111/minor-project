@@ -1,16 +1,24 @@
-# kmcalert
+KMC Alert
+A Smart Civic Issue Reporting and Public Alert System for Kathmandu Valley
 
-A new Flutter project.
+KMC Alert is a Flutter-based mobile application developed to provide a digital platform for reporting, monitoring, and managing civic issues within Kathmandu  City. The system is designed to improve communication between citizens and municipal authorities by allowing users to report local problems with relevant descriptions, media, and geographical locations.
 
-## Getting Started
+The application integrates Firebase for backend services and data management, while OpenStreetMap (OSM) is used to provide map-based functionality and location visualization. Through these technologies, KMC Alert provides a centralized platform where civic issues can be reported and associated with specific locations.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Features
+User registration and authentication
+Civic issue reporting
+Location-based issue reporting
+Interactive maps using OpenStreetMap
+Issue descriptions and supporting images
+Firebase-based data storage and backend services
+Notifications and civic alerts
+Issue status tracking
+Location visualization of reported issues
+User-focused interface for accessing and managing reports
+Technology Stack
+Flutter — Cross-platform mobile application framework
+Dart — Programming language used for application development
+Firebase — Backend services, authentication, database, and storage
+OpenStreetMap (OSM) — Map and location visualization
+Geolocation Services — Location-based functionality
